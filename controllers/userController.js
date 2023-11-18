@@ -57,14 +57,15 @@ const userController = {
   },
 
   addFriend(req, res) {
+    console.log('Request params:', req.params);
     User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { friends: req.params.id} },
+      { _id: req.params.userId },
+      { $push: { friends: req.params.userId} },
       { runValidators: true, new: true }
     )
       .then((user) => {
         if (!user) {
-          return res.status(404).json({ message: 'No user found with this ID!' });
+          return res.status(404).json({ message: 'No user(s) found by the(se) ID(s)!' });
         }
         res.json(user);
       })
@@ -73,13 +74,13 @@ const userController = {
 
   deleteFriend(req, res) {
     User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $pull: { friends: req.params.id } },
+      { _id: req.params.userId },
+      { $pull: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     )
       .then((user) => {
         if (!user) {
-          return res.status(404).json({ message: 'No user found with this ID!' });
+          return res.status(404).json({ message: 'No user(s) found by the(se) ID(s)!' });
         }
         res.json(user);
       })
