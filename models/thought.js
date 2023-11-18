@@ -1,4 +1,10 @@
 const { Schema, model } = require('mongoose');
+const moment = require('moment');
+
+// Function to format the createdAt field using moment.js
+function dateFormat(createdAtVal) {
+  return moment(createdAtVal).format('YYYY-MM-DD HH:mm');
+}
 
 // Reaction Schema
 const reactionSchema = require('./reaction');
@@ -9,11 +15,13 @@ const thoughtSchema = new Schema(
     thoughtText: {
       type: String,
       required: true,
-      maxlength: 280,
+      minlength: 1,
+      maxlength: 500,
     },
     createdAt: {
       type: Date,
       default: Date.now,
+      // formating date using moment
       get: (createdAtVal) => dateFormat(createdAtVal),
     },
     username: {
