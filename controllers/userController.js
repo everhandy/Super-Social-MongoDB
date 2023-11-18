@@ -5,8 +5,11 @@ const userController = {
     User.find()
       .populate('thoughts friends', '-__v')
       .then((users) => res.json(users))
-      .catch((err) => res.status(500).json(err));
-  },
+      .catch((err) => {
+        console.error('Error fetching all users:', err);
+        res.status(500).json(err)
+      });
+},
 
   getUserById(req, res) {
     User.findOne({ _id: req.params.id })
@@ -60,7 +63,7 @@ const userController = {
     console.log('Request params:', req.params);
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $push: { friends: req.params.userId} },
+      { $push: { friends: req.params.friendId} },
       { runValidators: true, new: true }
     )
       .then((user) => {
